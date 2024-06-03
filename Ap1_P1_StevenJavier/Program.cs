@@ -1,4 +1,6 @@
 using Ap1_P1_StevenJavier.Components;
+using Ap1_P1_StevenJavier.DAL;
+using Ap1_P1_StevenJavier.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ap1_P1_StevenJavier
@@ -14,6 +16,8 @@ namespace Ap1_P1_StevenJavier
                 .AddInteractiveServerComponents();
 
             var ConStr = builder.Configuration.GetConnectionString("ConStr");
+            builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+            builder.Services.AddScoped<ArticulosService>();
             builder.Services.AddBlazorBootstrap();
 
             var app = builder.Build();
