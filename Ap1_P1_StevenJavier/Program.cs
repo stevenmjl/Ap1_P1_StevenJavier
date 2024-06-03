@@ -12,6 +12,7 @@ namespace Ap1_P1_StevenJavier
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            var ConStr = builder.Configuration.GetConnectionString("ConStr");
             builder.Services.AddBlazorBootstrap();
 
             var app = builder.Build();
