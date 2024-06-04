@@ -13,7 +13,7 @@ namespace Ap1_P1_StevenJavier.Services
             _contexto = contexto;
         }
 
-        private async Task<bool> Existe(int id)
+        public async Task<bool> Existe(int id)
         {
             return await _contexto.Articulos
                 .AnyAsync(e => e.ArticulosId == id);

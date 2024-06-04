@@ -1,5 +1,110 @@
-﻿<h3>Create</h3>
+﻿@page "/Articulos/Crear"
+@rendermode InteractiveServer
+@inject ArticulosService articulosService
+@inject NavigationManager navigation
+
+<PageTitle>Crear art&Iacute;culos</PageTitle>
+<EditForm Model="Articulo" OnValidSubmit="Guardar">
+
+    <Toasts class="p-3" Messages="Mensajes" Placement="ToastsPlacement.TopRight" Delay="5000" />
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header text-white text-center">
+                <div class="bg-info rounded">
+                    <h1>Crear art&iacute;culo</h1>
+                </div>
+            </div>
+            @*Body*@
+            <div class="card-body">
+                <div class="col-1">
+                    @*Id*@
+                    <label class="form-label" for="Id">Id</label>
+                    <InputNumber id="Id" class="form-control" readonly @bind-Value="Articulo.ArticulosId"></InputNumber>
+                </div>
+                <div class="row">
+                    @*Descripcion*@
+                    <div class="col-3">
+                        <label class="form-label" for="Descripcion">Descripcion</label>
+                        <InputText id="Descripcion" class="form-control" @bind-Value="Articulo.Descripcion" placeholder="Ej: Pasta termica"></InputText>
+                        <ValidationMessage For="@(()=>Articulo.Descripcion)"></ValidationMessage>
+                    </div>
+                    @*Costo*@
+                    <div class="col-3">
+                        <label class="form-label" for="Costo">Costo</label>
+                        <InputNumber id="Costo" class="form-control" @bind-Value="Articulo.Costo"></InputNumber>
+                        <ValidationMessage For="@(()=>Articulo.Costo)"></ValidationMessage>
+                    </div>
+                    @*Ganancia*@
+                    <div class="col-3">
+                        <label class="form-label" for="Ganancia">Ganancia</label>
+                        <InputNumber id="Ganancia" class="form-control" @bind-Value="Articulo.Ganancia"></InputNumber>
+                        <ValidationMessage For="@(()=>Articulo.Ganancia)"></ValidationMessage>
+                    </div>
+                    @*Precio*@
+                    <div class="col-3">
+                        <label class="form-label" for="Precio">Precio</label>
+                        <InputNumber id="Precio" class="form-control" @bind-Value="Articulo.Precio"></InputNumber>
+                        <ValidationMessage For="@(()=>Articulo.Precio)"></ValidationMessage>
+                    </div>
+                </div>
+            </div>
+            @*Footer*@
+            <div class="card-footer">
+                <button class="btn btn-outline-success" type="submit"> Crear </button>
+                <button class="btn btn-outline-secondary" type="button" @onclick="Volver">Volver</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 @code {
 
+    public Articulos? Articulo { get; set; } = new Articulos();
+
+    List<ToastMessage> Mensajes = new List<ToastMessage>();
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            var nuevo = await articulosService.Guardar(Articulo);
+            if (nuevo)
+            {
+                MostrarMensaje(ToastType.Success, $"{Articulo.Descripcion} ha sido creado correctamente");
+                Articulo = new Articulos();
+            }
+            else
+            {
+                MostrarMensaje(ToastType.Danger, "No se ha podido crear correctamente");
+            }
+        }
+        else
+        {
+            MostrarMensaje(ToastType.Warning, "Ya existe ese art&iacute;culo.");
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        var existe = await articulosService.Existe(Articulo.ArticulosId);
+        return existe;
+    }
+
+    public void Volver() => navigation.NavigateTo("/Articulos/Index");
+
+    private void MostrarMensaje(ToastType toastType, string message)
+    {
+        Mensajes.Add(CrearMensaje(toastType, message));
+    }
+
+    private ToastMessage CrearMensaje(ToastType toastType, string message)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = "Notificación",
+            HelpText = $"{DateTime.Now}",
+            Message = message,
+        };
 }
