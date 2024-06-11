@@ -1,5 +1,44 @@
-﻿<h3>Details</h3>
+﻿@page "/Articulos/Details/articuloId={articuloId:int}"
+@rendermode InteractiveServer
+@inject ArticulosService articulosService 
+@inject NavigationManager navigation
 
+<PageTitle>Detalles</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header text-white text-center">
+            <div class="bg-info rounded">
+                <h1>Detalles del art&iacute;culo</h1>
+            </div           
+        </div>
+        @*Body*@
+        <div class="card-body">           
+            <ul>
+                <li>ID: @Articulo.ArticulosId</li>              
+                <li>Nombre: @Articulo.Descripcion</li>
+                <li>Costo: @Articulo.Costo.ToString("N2")</li>
+                <li>Ganancia: @Articulo.Ganancia.ToString("N2")</li>   
+                <li>Precio: @Articulo.Precio.ToString("N2")</li>
+            </ul>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <button class="btn btn-outline-secondary" type="button" @onclick="Volver">Volver</button>
+        </div>
+    </div>
+</div>
+   
 @code {
 
+    public Articulos? Articulo { get; set; } = new Articulos();
+    [Parameter]
+    public int articuloId { get; set; }
+    protected override async Task OnInitializedAsync()
+    {        
+        Articulo = await articulosService.BuscarId(articuloId);
+    }
+
+    public void Volver() => navigation.NavigateTo("/Articulos/Index");
 }

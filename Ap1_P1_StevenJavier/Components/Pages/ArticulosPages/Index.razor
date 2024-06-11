@@ -48,7 +48,6 @@
                     <tr>
                         <th>Id</th>
                         <th>Nombre</th>
-                        <th>Descripci&oacute;n</th>
                         <th>Costo</th>
                         <th>Ganancia</th>
                         <th>Precio</th>
@@ -116,7 +115,7 @@
 
     public void Visualizar(int id)
     {
-        navigation.NavigateTo($"/Articulos/Visualizar/articuloId={id}");
+        navigation.NavigateTo($"/Articulos/Details/articuloId={id}");
     }
 
     public void Editar(int id)
@@ -126,6 +125,6 @@
 
     public void Eliminar(int id)
     {
-        navigation.NavigateTo($"/Articulos/Eliminar/articuloId={id}");
+        navigation.NavigateTo($"/Articulos/Delete/articuloId={id}");
     }
 }

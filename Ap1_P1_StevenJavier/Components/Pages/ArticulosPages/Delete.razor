@@ -1,5 +1,74 @@
-﻿<h3>Delete</h3>
+﻿@page "/Articulos/Delete/articuloId={articuloId:int}"
+@rendermode InteractiveServer
+@inject ArticulosService articulosService 
+@inject NavigationManager navigation
 
+<PageTitle>Detalles</PageTitle>
+
+<Toasts class="p-3" Messages="Mensajes" Placement="ToastsPlacement.TopRight"
+        AutoHide="true" Delay="5000" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header text-white text-center">
+            <div class="bg-danger rounded">
+                <h1>Eliminar el art&iacute;culo</h1>
+            </div           
+        </div>
+        @*Body*@
+        <div class="card-body">           
+            <ul>
+                <li>ID: @Articulo.ArticulosId</li>              
+                <li>Nombre: @Articulo.Descripcion</li>
+                <li>Costo: @Articulo.Costo.ToString("N2")</li>
+                <li>Ganancia: @Articulo.Ganancia.ToString("N2")</li>   
+                <li>Precio: @Articulo.Precio.ToString("N2")</li>
+            </ul>
+        </div>
+        @*Botones*@
+        <div class="card-footer d-flex justify-content-end">
+            <button class="btn btn-outline-danger bi bi-trash" type="button"
+                    @onclick="Eliminar" style="margin-right: 10px;">
+                Eliminar
+            </button>
+            <button class="btn btn-outline-secondary" type="button"
+                    @onclick="Volver">
+                Volver
+            </button>
+        </div>
+    </div>
+</div>
+   
 @code {
 
+    public Articulos? Articulo { get; set; } = new Articulos();
+    [Parameter]
+    public int articuloId { get; set; }
+
+    List<ToastMessage> Mensajes = new List<ToastMessage>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Articulo = await articulosService.BuscarId(articuloId);
+    }
+    public async Task Eliminar()
+    {
+        await articulosService.Eliminar(articuloId);
+        MostrarMensaje(ToastType.Success, "Artículo eliminado correctamente.");
+    }
+    private void MostrarMensaje(ToastType toastType, string message)
+    {
+        Mensajes.Add(CrearMensaje(toastType, message));
+    }
+    private ToastMessage CrearMensaje(ToastType toastType, string message)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = "Notificación",
+            HelpText = $"{DateTime.Now}",
+            Message = message,
+        };
+
+    public void Volver() => navigation.NavigateTo("/Articulos/Index");
 }

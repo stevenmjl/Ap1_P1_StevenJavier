@@ -17,9 +17,7 @@ namespace Ap1_P1_StevenJavier.Models
         [Required(ErrorMessage = "Valor necesario.")]
         [Range(0.1, 1000000, ErrorMessage = "Número no permitido.")]
         public double Ganancia { get; set; }
-        
-        [Required(ErrorMessage = "Valor necesario.")]
-        [Range(0.1, 1000000, ErrorMessage = "Número no permitido.")]
+
         public double Precio { get; set; }
     }
 }

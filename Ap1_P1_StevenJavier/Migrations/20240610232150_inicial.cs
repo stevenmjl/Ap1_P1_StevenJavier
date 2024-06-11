@@ -5,7 +5,7 @@
 namespace Ap1_P1_StevenJavier.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
